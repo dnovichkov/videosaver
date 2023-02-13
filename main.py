@@ -80,7 +80,8 @@ async def process_url_invalid(message: types.Message):
     return await message.reply("Неизвестный формат ссылки, нужна ссылка на видео")
 
 
-@dp.message_handler(lambda message: message.text not in ["Video", "Audio", "Voice", "Отмена"], state=Form.file_format)
+@dp.message_handler(lambda message: message.text not in ["Video", "Audio", "Voice", "Отмена"],
+                    state=Form.file_format)
 async def process_format_invalid(message: types.Message):
     return await message.reply("Неизвестный формат файла. Выберите формат с клавиатуры")
 
@@ -90,7 +91,7 @@ def download_video_or_audio(url: str, file_format: str) -> str:
         if sys.platform == 'win32':
             return download_audio_from_youtube(url, 'videosaver/ffmpeg.exe')
         return download_audio_from_youtube(url)
-    elif file_format == 'Video':
+    if file_format == 'Video':
         return download_video_from_youtube(url)
     return ''
 

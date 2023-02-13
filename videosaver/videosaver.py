@@ -12,11 +12,10 @@ def download_video_from_youtube(video_url: str) -> str:
 
 def download_audio_from_youtube(video_url: str, ffmpeg_binary_location=None) -> str:
     ydl_opts = {
-        'format': 'bestaudio/best',
+        'format': 'm4a/bestaudio/best',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
+            'preferredcodec': 'm4a',
         }],
     }
     if ffmpeg_binary_location:
