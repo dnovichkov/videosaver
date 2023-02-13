@@ -1,7 +1,7 @@
 from yt_dlp import YoutubeDL
 
 
-def download_video_from_youtube(video_url):
+def download_video_from_youtube(video_url: str) -> str:
     res_filename = ''
     with YoutubeDL() as ydl:
         info = ydl.extract_info(video_url, download=True)
@@ -10,7 +10,7 @@ def download_video_from_youtube(video_url):
     return res_filename
 
 
-def download_audio_from_youtube(video_url, ffmpeg_binary_location=None):
+def download_audio_from_youtube(video_url: str, ffmpeg_binary_location=None) -> str:
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{

@@ -85,7 +85,7 @@ async def process_format_invalid(message: types.Message):
     return await message.reply("Неизвестный формат файла. Выберите формат с клавиатуры")
 
 
-def download_video_or_audio(url, file_format):
+def download_video_or_audio(url: str, file_format: str) -> str:
     if file_format in ['Audio', 'Voice']:
         if sys.platform == 'win32':
             return download_audio_from_youtube(url, 'videosaver/ffmpeg.exe')
