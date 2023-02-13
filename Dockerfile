@@ -1,6 +1,5 @@
 FROM python:3.8-alpine
-
-ARUN apk add  --no-cache ffmpeg
+RUN apk add  --no-cache ffmpeg
 
 COPY . /app
 
