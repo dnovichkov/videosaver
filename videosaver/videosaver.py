@@ -20,7 +20,8 @@ def download_audio_from_youtube(video_url, ffmpeg_binary_location=None):
         }],
     }
     if ffmpeg_binary_location:
-        ydl_opts['ffmpeg-location'] = ffmpeg_binary_location
+        filepath = ffmpeg_binary_location
+        ydl_opts['ffmpeg_location'] = filepath
 
     with YoutubeDL(ydl_opts) as ydl:
         res_filename = ''
@@ -31,9 +32,11 @@ def download_audio_from_youtube(video_url, ffmpeg_binary_location=None):
     return res_filename
 
 
-url = 'https://www.youtube.com/watch?v=ZZv0MUVDufI'
-audio_filename = download_audio_from_youtube(url, 'ffmpeg.exe')
-print(f'We save audio from {url} to {audio_filename}')
+if __name__ == '__main__':
 
-resulted_filename = download_video_from_youtube(url)
-print(f'We save {url} to {resulted_filename}')
+    url = 'https://www.youtube.com/watch?v=ZZv0MUVDufI'
+    audio_filename = download_audio_from_youtube(url, 'ffmpeg.exe')
+    print(f'We save audio from {url} to {audio_filename}')
+
+    resulted_filename = download_video_from_youtube(url)
+    print(f'We save {url} to {resulted_filename}')
