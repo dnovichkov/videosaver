@@ -1,4 +1,3 @@
-
 import os
 import sys
 
@@ -113,7 +112,8 @@ async def process_file_format(message: types.Message, state: FSMContext):
         return await cancel_handler(message, state)
 
     async with state.proxy() as data:
-        data['file_format'] = message.text
+        file_format = message.text
+        data['file_format'] = file_format
 
         # Remove keyboard
         markup = types.ReplyKeyboardRemove()
@@ -123,7 +123,7 @@ async def process_file_format(message: types.Message, state: FSMContext):
             message.chat.id,
             md.text(
                 md.text('Вы просили ссылку на,', md.bold(data['video_url'])),
-                md.text('Формат файла:', data['file_format']),
+                md.text('Формат файла:', file_format),
                 sep='\n',
             ),
             reply_markup=markup,
@@ -141,24 +141,28 @@ async def process_file_format(message: types.Message, state: FSMContext):
         )
 
         file_name = download_video_or_audio(url, data['file_format'])
-        if data['file_format'] == 'Video':
+        logger.debug(f'{file_name=}')
+        if file_format == 'Video':
             await bot.send_video(
                 chat_id=message.chat.id,
                 video=open(file_name, 'rb'),
                 caption=f'{url} has been downloaded.'
             )
-        elif data['file_format'] == 'Voice':
+        elif 'Voice' in file_format:
             await bot.send_voice(
                 chat_id=message.chat.id,
                 voice=open(file_name, 'rb'),
                 caption=f'{url} has been downloaded.'
             )
-        elif data['file_format'] == 'Audio':
+        elif file_format == 'Audio':
             await bot.send_audio(
                 chat_id=message.chat.id,
                 audio=open(file_name, 'rb'),
                 caption=f'{url} has been downloaded.'
             )
+        else:
+            logger.debug(f'Неизвестный формат: {file_format}')
+            await message.reply(f'Неизвестный формат - {file_format}')
     except exceptions.NetworkError as ex:
         logger.error(ex)
         await message.reply(f'Не получилось отправить видео, возможно, надо попробовать другое качество: {ex}')
@@ -174,4 +178,6 @@ async def process_file_format(message: types.Message, state: FSMContext):
 
 
 if __name__ == '__main__':
+    logger.remove()
+    logger.add(sys.stdout, level="TRACE")
     executor.start_polling(dp, skip_updates=True)

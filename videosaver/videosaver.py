@@ -1,4 +1,5 @@
 from yt_dlp import YoutubeDL
+from loguru import logger
 
 
 def download_video_from_youtube(video_url: str) -> str:
@@ -7,6 +8,7 @@ def download_video_from_youtube(video_url: str) -> str:
         info = ydl.extract_info(video_url, download=True)
         if info.get('requested_downloads'):
             res_filename = info.get('requested_downloads')[0].get('filepath')
+    logger.debug(f'{video_url} saved to {res_filename}')
     return res_filename
 
 
@@ -29,14 +31,15 @@ def download_audio_from_youtube(video_url: str, ffmpeg_binary_location=None, pre
         # ydl.download([video_url])
         if info.get('requested_downloads'):
             res_filename = info.get('requested_downloads')[0].get('filepath')
+    logger.debug(f'{video_url} saved to {res_filename}')
     return res_filename
 
 
 if __name__ == '__main__':
 
     url = 'https://www.youtube.com/watch?v=ZZv0MUVDufI'
-    audio_filename = download_audio_from_youtube(url, 'ffmpeg.exe')
-    print(f'We save audio from {url} to {audio_filename}')
+    audio_filename = download_audio_from_youtube(url, ffmpeg_binary_location='ffmpeg.exe', preferred_quality=128)
+    logger.debug(f'We save audio from {url} to {audio_filename}')
 
     resulted_filename = download_video_from_youtube(url)
-    print(f'We save {url} to {resulted_filename}')
+    logger.debug(f'We save {url} to {resulted_filename}')
