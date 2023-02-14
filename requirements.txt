@@ -12,6 +12,7 @@ defaultenv==0.0.14
 fastapi==0.89.1
 frozenlist==1.3.3
 idna==3.4
+loguru==0.6.0
 magic-filter==1.0.9
 multidict==6.0.4
 mutagen==1.46.0

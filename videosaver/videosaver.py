@@ -10,13 +10,13 @@ def download_video_from_youtube(video_url: str) -> str:
     return res_filename
 
 
-def download_audio_from_youtube(video_url: str, ffmpeg_binary_location=None) -> str:
+def download_audio_from_youtube(video_url: str, ffmpeg_binary_location=None, preferred_quality=128) -> str:
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
-            'preferredquality': '128',
+            'preferredquality': str(preferred_quality),
         }],
     }
     if ffmpeg_binary_location:
