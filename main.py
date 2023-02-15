@@ -169,6 +169,9 @@ async def process_file_format(message: types.Message, state: FSMContext):
     except yt_dlp.utils.DownloadError as ex:
         logger.error(ex)
         await message.reply(f'Не получилось скачать видео, возможно, надо попробовать другое качество: {ex}')
+    except exceptions.TelegramAPIError as ex:
+        logger.error(ex)
+        await message.reply(f'Не получилось скачать видео, попробуйте позже: {ex}')
     finally:
         if file_name:
             os.remove(file_name)
