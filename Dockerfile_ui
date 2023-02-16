@@ -1,0 +1,11 @@
+FROM python:3.8-alpine
+RUN apk add  --no-cache ffmpeg
+
+COPY . /app
+
+WORKDIR /app
+
+# Divide requirements to different projects
+RUN pip install -r requirements.txt
+
+CMD python ./ui_app.py
