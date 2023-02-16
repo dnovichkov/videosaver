@@ -2,6 +2,7 @@ import sys
 from nicegui import ui as _ui, app
 
 from loguru import logger
+from defaultenv import env
 
 from videosaver.videosaver import download_video_or_audio
 
@@ -31,7 +32,8 @@ def show_ui(ui):
 
     # TODO: Change directory for files
     app.add_static_files('/static', '/')
-    ui.run()
+    port = env('UI_PORT', int)
+    ui.run(port=port)
 
 
 if __name__ in {"__main__", "__mp_main__"}:
