@@ -14,7 +14,7 @@ from aiogram.types import ParseMode
 from aiogram.utils import executor, exceptions
 from defaultenv import env
 
-from videosaver.videosaver import download_video_from_youtube, download_audio_from_youtube
+from videosaver.videosaver import download_video_or_audio
 
 API_TOKEN = env('API_TOKEN')
 
@@ -86,24 +86,6 @@ async def process_url_invalid(message: types.Message):
                     state=Form.file_format)
 async def process_format_invalid(message: types.Message):
     return await message.reply("Неизвестный формат файла. Выберите формат с клавиатуры")
-
-
-def download_video_or_audio(url: str, file_format: str) -> str:
-    if file_format in ["Audio", "Voice - высокое качество", "Voice - среднее качество", "Voice - низкое качество"]:
-        quality_names = {"Audio": 128,
-                         "Voice - высокое качество": 128,
-                         "Voice - среднее качество": 64,
-                         "Voice - низкое качество": 32,
-                         }
-        # Default quality is 128
-        quality = quality_names.get(file_format, 128)
-        logger.info(f'Скачиваем {url} в формате {file_format} - {quality}')
-        if sys.platform == 'win32':
-            return download_audio_from_youtube(url, 'videosaver/ffmpeg.exe', preferred_quality=quality)
-        return download_audio_from_youtube(url, preferred_quality=quality)
-    if file_format == 'Video':
-        return download_video_from_youtube(url)
-    return ''
 
 
 @dp.message_handler(state=Form.file_format)

@@ -1,3 +1,5 @@
+import sys
+
 from yt_dlp import YoutubeDL
 from loguru import logger
 
@@ -35,11 +37,30 @@ def download_audio_from_youtube(video_url: str, ffmpeg_binary_location=None, pre
     return res_filename
 
 
+def download_video_or_audio(url: str, file_format: str) -> str:
+    if file_format in ["Audio", "Voice - высокое качество", "Voice - среднее качество", "Voice - низкое качество"]:
+        quality_names = {"Audio": 128,
+                         "Voice - высокое качество": 128,
+                         "Voice - среднее качество": 64,
+                         "Voice - низкое качество": 32,
+                         }
+        # Default quality is 128
+        quality = quality_names.get(file_format, 128)
+        logger.info(f'Скачиваем {url} в формате {file_format} - {quality}')
+        if sys.platform == 'win32':
+            return download_audio_from_youtube(url, 'videosaver/ffmpeg.exe', preferred_quality=quality)
+        return download_audio_from_youtube(url, preferred_quality=quality)
+    if file_format == 'Video':
+        return download_video_from_youtube(url)
+    return ''
+
+
 if __name__ == '__main__':
 
-    url = 'https://www.youtube.com/watch?v=ZZv0MUVDufI'
-    audio_filename = download_audio_from_youtube(url, ffmpeg_binary_location='ffmpeg.exe', preferred_quality=128)
-    logger.debug(f'We save audio from {url} to {audio_filename}')
+    _url = 'https://www.youtube.com/watch?v=ZZv0MUVDufI'
+    audio_filename = download_audio_from_youtube(_url, ffmpeg_binary_location='ffmpeg.exe', preferred_quality=128)
+    logger.debug(f'We save audio from {_url} to {audio_filename}')
 
-    resulted_filename = download_video_from_youtube(url)
-    logger.debug(f'We save {url} to {resulted_filename}')
+    resulted_filename = download_video_from_youtube(_url)
+    logger.debug(f'We save {_url} to {resulted_filename}')
+
