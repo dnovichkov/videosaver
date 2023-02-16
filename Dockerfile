@@ -5,6 +5,6 @@ COPY . /app
 
 WORKDIR /app
 
-RUN pip install -r requirements.txt
+RUN pip install -r bot_requirements.txt
 
 CMD python ./main.py
