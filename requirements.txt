@@ -2,4 +2,4 @@ aiogram==2.25.1
 defaultenv==0.0.14
 loguru==0.6.0
 nicegui==1.1.8
-yt-dlp==2023.1.6
+yt-dlp==2023.2.17
