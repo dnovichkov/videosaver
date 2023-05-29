@@ -6,7 +6,10 @@ from loguru import logger
 
 def download_video_from_youtube(video_url: str) -> str:
     res_filename = ''
-    with YoutubeDL() as ydl:
+    ydl_opts = {
+        "format": "best[filesize<=50M][ext=mp4] / w[ext=mp4]",
+    }
+    with YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(video_url, download=True)
         if info.get('requested_downloads'):
             res_filename = info.get('requested_downloads')[0].get('filepath')
